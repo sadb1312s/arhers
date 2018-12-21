@@ -10,19 +10,21 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
-
-
+import javafx.geometry.Insets;
+import javafx.scene.shape.Line;
+import javafx.scene.text.Text;
 
 
 public class Controller {
 
     static Canvas canvas = new Canvas( 500, 500 );
     static GraphicsContext gc = canvas.getGraphicsContext2D();
-    static int ArchSize=80;
-    static Player1 player1;
-    static Player2 player2;
+    static int ArchSize=40;
+    static Player player1;
+    static Player player2;
     static Selection moveSelect;
-    static Selection selectionIn;
+    static int[][] matrix= new int[25][25];
+
 
     @FXML
     private AnchorPane MainAnchorPane;
@@ -33,22 +35,37 @@ public class Controller {
     @FXML
     private StackPane GamePane;
 
-
-
     @FXML
-    public void keyHandler(KeyEvent event) {
-        System.out.println("A Key was pressed");
-    }
+    private StackPane Test;
+
+
+    public static Text Text = new Text("Total");
 
     public void initialize(){
+
+
+
+
+        Test.getChildren().add(Text);
         GamePane.getChildren().add( canvas );
         run();
-        player1 = new Player1();
+
+
+        player1 = new Player(0,Color.GREEN,Color.NAVAJOWHITE,Color.LIGHTGREEN,true);
         player1.paint();
-        player2 = new Player2();
+
+
+
+        player2 = new Player(4,Color.RED,Color.NAVAJOWHITE,Color.LIGHTPINK,false);
         player2.paint();
+
         moveSelect = new Selection(2,2);
+        moveSelect.color=player1.color3;
+
         moveSelect.paint();
+        Text.setText("Ходит игрок 1");
+
+
 
     }
 
@@ -56,11 +73,16 @@ public class Controller {
     //game loop
     public void run() {
 
+
+
         MathTread mathTread = new MathTread();
         mathTread.start();
 
 
+
     }
+
+
 
 
 
