@@ -83,12 +83,19 @@ public class MathTread extends Thread{
             }
 
 
-            //System.out.println("Рисуем");
+            //System.out.println(moveSelect.GameOver);
 
+        }
+
+        if(player1.win){
+            System.out.println("Игрок 1 победил");
+        }
+        if(player2.win){
+            System.out.println("Игрок 2 победил");
         }
     }
 
-    void WayRender(){
+    private void WayRender(){
 
         //заполнение матрицы смежности
         //gc.strokeLine(50+x1*100, 50+y1*100, 50+(x2-1)*100, 50+(y2-1)*100);

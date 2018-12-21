@@ -18,6 +18,7 @@ import static sample.MathTread.matrix;
 
 public class Player {
 
+    boolean win=false;
     boolean CanDeadSelect=false;
     boolean SelectFlag=false;
     boolean NeedSelect;
@@ -207,7 +208,7 @@ public class Player {
 
         }
 
-
+        GameOverCheck();
         return MoveOrNo;
     }
 
@@ -290,14 +291,55 @@ public class Player {
             }
         }
 
+
         return MoveOrNo;
+
     }
 
 
-    public void Go(){
-        if(Direction.equals(KeyCode.ENTER)) {
+    public void GameOverCheck(){
+
+
+        int g1=0;
+        int n1=0;
+
+        for(ArcherPoint point:player1.PlayerPoint){
+            if(!point.Killed){
+                n1++;
+            }
+            if(point.y==4&&!point.Killed){
+                g1++;
+            }
+        }
+        System.out.println(moveSelect.GameOver);
+        if(g1==n1){
+            player1.win=true;
+            Controller.Text.setText("Игрок 1 победил");
+            moveSelect.GameOver=true;
+
 
         }
+
+        int g2=0;
+        int n2=0;
+        for(ArcherPoint point1:player2.PlayerPoint){
+            if(!point1.Killed){
+                n2++;
+            }
+            if(point1.y==0&&!point1.Killed){
+                g2++;
+            }
+        }
+        if(g2==n2){
+            player2.win=true;
+            Controller.Text.setText("Игрок 2 победил");
+            moveSelect.GameOver=true;
+        }
+
+    }
+
+
+    public void minimax(){
 
     }
 

@@ -2,10 +2,16 @@
 
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane fx:id="MainAnchorPane" focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" style="-fx-background-color: blue;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<AnchorPane fx:id="MainAnchorPane" focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="700.0" style="-fx-background-color: #E6E6FA;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
-      <StackPane fx:id="GamePane" layoutX="100.0" layoutY="50.0" prefHeight="500.0" prefWidth="500.0" style="-fx-background-color: white;" />
-      <StackPane fx:id="Test" layoutX="100.0" layoutY="14.0" prefHeight="25.0" prefWidth="500.0" style="-fx-background-color: white;" />
+      <Text layoutX="538.0" layoutY="31.0" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter-выбрать точку" wrappingWidth="136.13671875" />
+      <StackPane fx:id="GamePane" layoutX="25.0" layoutY="50.0" prefHeight="500.0" prefWidth="500.0" style="-fx-background-color: white;" />
+      <StackPane fx:id="Test" layoutX="25.0" layoutY="14.0" prefHeight="25.0" prefWidth="500.0" style="-fx-background-color: white;" />
+      <Text layoutX="538.0" layoutY="72.0" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Пробел-Отменить выбор" wrappingWidth="136.13671875" />
+      <Text layoutX="538.0" layoutY="125.0" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter-переместить точку(Если она выбрана)" wrappingWidth="136.13671875" />
+      <Text layoutX="538.0" layoutY="192.0" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="D-Показать мертвых лучников для воскрешения(если такие есть)()" wrappingWidth="136.13671875" />
+      <Text layoutX="538.0" layoutY="271.0" stroke="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="B-Выйти из режима восрешения" wrappingWidth="136.13671875" />
    </children>
 </AnchorPane>

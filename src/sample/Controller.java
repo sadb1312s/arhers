@@ -65,7 +65,7 @@ public class Controller {
         moveSelect.paint();
         Text.setText("Ходит игрок 1");
 
-
+        //
 
     }
 
