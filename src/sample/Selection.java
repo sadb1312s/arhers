@@ -40,7 +40,8 @@ public class Selection {
 
     //двигаем точку выбора
     public void move() {
-        if (!GameOver) {
+        //играют 2 живых игрока
+        if (!GameOver&&!player2.NeedSelect) {
             if (Direction.equals(KeyCode.LEFT)) {
                 if (x != 0)
                     x--;
@@ -226,6 +227,12 @@ public class Selection {
 
             //System.out.println("x="+x+" y="+y);
         }
+
+        if(player2.NeedSelect&&player2.bot){
+            System.out.println("Время бота ходить");
+            player2.minimax(player1,player2);
+        }
+
     }
 
 }

@@ -51,12 +51,12 @@ public class Controller {
         run();
 
 
-        player1 = new Player(0,Color.GREEN,Color.NAVAJOWHITE,Color.LIGHTGREEN,true);
+        player1 = new Player(0,Color.GREEN,Color.NAVAJOWHITE,Color.LIGHTGREEN,true,false);
         player1.paint();
 
 
 
-        player2 = new Player(4,Color.RED,Color.NAVAJOWHITE,Color.LIGHTPINK,false);
+        player2 = new Player(4,Color.RED,Color.NAVAJOWHITE,Color.LIGHTPINK,false,true);
         player2.paint();
 
         moveSelect = new Selection(2,2);
@@ -74,9 +74,12 @@ public class Controller {
     public void run() {
 
 
-
+        //GameLoop game=new GameLoop();
         MathTread mathTread = new MathTread();
+
         mathTread.start();
+        //game.start();
+
 
 
 

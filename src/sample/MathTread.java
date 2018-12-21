@@ -73,6 +73,7 @@ public class MathTread extends Thread{
             player2.paint();
 
 
+
             if(NeedDeadPrint){
                 if(player1.CanDeadSelect) {
                     player1.DeadPaint();
@@ -83,16 +84,11 @@ public class MathTread extends Thread{
             }
 
 
-            //System.out.println(moveSelect.GameOver);
+
 
         }
 
-        if(player1.win){
-            System.out.println("Игрок 1 победил");
-        }
-        if(player2.win){
-            System.out.println("Игрок 2 победил");
-        }
+
     }
 
     private void WayRender(){

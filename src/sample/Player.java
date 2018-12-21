@@ -18,6 +18,7 @@ import static sample.MathTread.matrix;
 
 public class Player {
 
+    boolean bot;
     boolean win=false;
     boolean CanDeadSelect=false;
     boolean SelectFlag=false;
@@ -28,7 +29,7 @@ public class Player {
     int y=0;
     ArrayList<ArcherPoint> PlayerPoint= new ArrayList<>();
 
-    public Player(int y,Color color,Color color2, Color color3, Boolean NeedSelect){
+    public Player(int y,Color color,Color color2, Color color3, Boolean NeedSelect,Boolean bot){
         for(int i=0;i<5;i++){
             this.y=y;
             this.color=color;
@@ -37,6 +38,7 @@ public class Player {
             this.NeedSelect =NeedSelect;
             ArcherPoint archerPoint = new ArcherPoint(i,y,color,color2,color3);
             PlayerPoint.add(archerPoint);
+            this.bot=bot;
         }
     }
 
@@ -256,6 +258,9 @@ public class Player {
                 }
 
 
+            }else{
+                point.Zapret=false;
+                point.zaprenN=0;
             }
         }
 
@@ -338,10 +343,129 @@ public class Player {
 
     }
 
+    //бот который не даст никому победить
+    public void minimax(Player player1temp,Player player2temp){
+        System.out.println("Время бота думать");
+        System.out.println("Возможные ходы бота");
 
-    public void minimax(){
+        ArrayList<Integer> vozmXodOt = new ArrayList<>();
+        ArrayList<Integer> vozmXodKuda = new ArrayList<>();
+        ArrayList<Integer> OcenkaXoda = new ArrayList<>();
+
+
+        for(ArcherPoint point:player2temp.PlayerPoint){
+
+            for(int j=0;j<25;j++){
+                boolean bad=false;
+                if((matrix[point.n][j]==1||matrix[j][point.n]==1)&&!point.Killed) {
+                    //System.out.println("Бот может сходить из " + point.n + " v " + j);
+
+
+
+
+
+
+                    //System.out.println("Бот должен проверить хороший это ход или плохой");
+
+
+                    for(ArcherPoint point2:player1temp.PlayerPoint){
+                        for(int i=0;i<25;i++){
+                            if(matrix[point2.n][i]==1||matrix[i][point2.n]==1) {
+                                if(j==i){
+                                    //System.out.println("Плохой ход");
+                                    bad=true;
+
+                                }
+                            }
+                        }
+                    }
+
+
+                    if(!point.Zapret){
+                        if(point.n!=point.zaprenN) {
+                            vozmXodOt.add(point.n);
+                            vozmXodKuda.add(j);
+                            if(bad){
+                                OcenkaXoda.add(-10);
+                            }else{
+                                OcenkaXoda.add(10);
+                            }
+                        }
+                    }
+
+
+
+
+
+                }
+
+
+            }
+
+        }
+
+
+
+
+        for (int i=0;i<vozmXodKuda.size();i++){
+            System.out.println(i);
+            System.out.println(vozmXodOt.get(i)+" v "+vozmXodKuda.get(i)+" "+OcenkaXoda.get(i));
+
+        }
+
+        //выбираем сомое большое число
+        int N=0;
+        int iz=0;
+        int kuda=0;
+        for (int i=0;i<vozmXodKuda.size();i++){
+            if(OcenkaXoda.get(i)>N)
+                N=OcenkaXoda.get(i);
+                iz=vozmXodOt.get(i);
+                kuda=vozmXodKuda.get(i);
+
+        }
+
+        System.out.println("бот решил ходить из "+iz+" v "+kuda);
+
+        //ходим
+        //декодируем n в x и y
+        int y1=0;
+        int x1=0;
+        //куда
+        int y2=0;
+        int x2=0;
+
+
+
+        y1=iz/5;
+        x1=iz-5*y1;
+
+        y2=kuda/5;
+        x2=kuda-5*y2;
+
+        for(ArcherPoint point:player2temp.PlayerPoint){
+            System.out.println(point.Zapret);
+        }
+
+
+
+        player2.select(x1,y1);
+        if (player1.FreePlaceCheck(x2, y2)) {
+            player2.PointMove(x2, y2);
+        }
+
+        player1.NeedSelect = true;
+        player2.NeedSelect = false;
+        moveSelect.color = player1.color3;
+        System.out.println();
+
+
+
 
     }
+
+
+
 
 
 
