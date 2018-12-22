@@ -52,12 +52,12 @@ public class Controller {
 
 
         player1 = new Player(0,Color.GREEN,Color.NAVAJOWHITE,Color.LIGHTGREEN,true,false);
-        player1.paint();
+        player1.paint(player1,player2);
 
 
 
         player2 = new Player(4,Color.RED,Color.NAVAJOWHITE,Color.LIGHTPINK,false,true);
-        player2.paint();
+        player2.paint(player1,player2);
 
         moveSelect = new Selection(2,2);
         moveSelect.color=player1.color3;

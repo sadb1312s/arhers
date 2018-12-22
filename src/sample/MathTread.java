@@ -69,17 +69,17 @@ public class MathTread extends Thread{
             gameFieldPaint();
 
 
-            player1.paint();
-            player2.paint();
+            player1.paint(player1,player2);
+            player2.paint(player1,player2);
 
 
 
             if(NeedDeadPrint){
                 if(player1.CanDeadSelect) {
-                    player1.DeadPaint();
+                    player1.DeadPaint(player1,player2);
                 }
                 if(player2.CanDeadSelect) {
-                    player2.DeadPaint();
+                    player2.DeadPaint(player1,player2);
                 }
             }
 

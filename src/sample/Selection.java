@@ -83,7 +83,7 @@ public class Selection {
                 System.out.println("Выйти из выбора мертвецов!");
                 if (player1.NeedSelect && n == 0) {
                     n = 1;
-                    player1.unselect();
+                    player1.unselect(player1,player2);
                     NeedDeadSelect = false;
                     player1.NeedSelect = false;
                     player2.NeedSelect = true;
@@ -94,7 +94,7 @@ public class Selection {
                 }
                 if (player2.NeedSelect && n == 0) {
                     n = 1;
-                    player2.unselect();
+                    player2.unselect(player1,player2);
                     NeedDeadSelect = false;
                     player1.NeedSelect = true;
                     player2.NeedSelect = false;
@@ -110,7 +110,7 @@ public class Selection {
                 if (player1.NeedSelect && !Select && !NeedDeadSelect) {
 
 
-                    player1.select(x, y);
+                    player1.select(x, y,player1,player2);
                     if (player1.SelectFlag) {
                         Select = true;
                     }
@@ -118,7 +118,7 @@ public class Selection {
 
                 if (player2.NeedSelect && !Select && !NeedDeadSelect) {
 
-                    player2.select(x, y);
+                    player2.select(x, y,player1,player2);
                     if (player2.SelectFlag) {
                         Select = true;
                     }
@@ -127,10 +127,10 @@ public class Selection {
                 if (NeedDeadSelect) {
                     System.out.println("DEAD");
                     if (player1.CanDeadSelect) {
-                        player1.DeadSelect(x, y);
+                        player1.DeadSelect(x, y,player1,player2);
                     }
                     if (player2.CanDeadSelect) {
-                        player2.DeadSelect(x, y);
+                        player2.DeadSelect(x, y,player1,player2);
                     }
                     Select = true;
                 }
@@ -141,8 +141,8 @@ public class Selection {
 
                 if (player1.NeedSelect && Select) {
                     //проверка нет ли тут другого лучника
-                    if (player1.FreePlaceCheck(x, y)) {
-                        if (player1.PointMove(x, y)) {
+                    if (player1.FreePlaceCheck(x, y,player1,player2)) {
+                        if (player1.PointMove(x, y,player1,player2)) {
                             if (!NeedDeadSelect) {
                                 player1.NeedSelect = false;
                                 player2.NeedSelect = true;
@@ -158,8 +158,8 @@ public class Selection {
                 }
 
                 if (player2.NeedSelect && Select) {
-                    if (player2.FreePlaceCheck(x, y)) {
-                        if (player2.PointMove(x, y)) {
+                    if (player2.FreePlaceCheck(x, y,player1,player2)) {
+                        if (player2.PointMove(x, y,player1,player2)) {
                             if (!NeedDeadSelect) {
                                 player1.NeedSelect = true;
                                 player2.NeedSelect = false;
@@ -177,8 +177,8 @@ public class Selection {
             if (Direction.equals(KeyCode.ENTER) && NeedDeadSelect) {
                 if (player1.NeedSelect && Select) {
                     if (y == 0) {
-                        if (player1.FreePlaceCheck(x, y)) {
-                            if (player1.DeadMove(x, y)) {
+                        if (player1.FreePlaceCheck(x, y,player1,player2)) {
+                            if (player1.DeadMove(x, y,player1,player2)) {
                                 NeedDeadSelect = false;
                                 player1.NeedSelect = false;
                                 player2.NeedSelect = true;
@@ -193,8 +193,8 @@ public class Selection {
                 }
                 if (player2.NeedSelect && Select) {
                     if (y == 4) {
-                        if (player2.FreePlaceCheck(x, y)) {
-                            if (player2.DeadMove(x, y)) {
+                        if (player2.FreePlaceCheck(x, y,player1,player2)) {
+                            if (player2.DeadMove(x, y,player1,player2)) {
                                 NeedDeadSelect = false;
                                 player2.NeedSelect = false;
                                 player1.NeedSelect = true;
@@ -214,10 +214,10 @@ public class Selection {
             if (Direction.equals(KeyCode.SPACE)) {
                 Select = false;
                 if (player1.NeedSelect) {
-                    player1.unselect();
+                    player1.unselect(player1,player2);
                 }
                 if (player2.NeedSelect) {
-                    player2.unselect();
+                    player2.unselect(player1,player2);
                 }
 
             }
@@ -230,7 +230,7 @@ public class Selection {
 
         if(player2.NeedSelect&&player2.bot){
             System.out.println("Время бота ходить");
-            player2.minimax(player1,player2);
+            player2.minimax2(player1,player2);
         }
 
     }
