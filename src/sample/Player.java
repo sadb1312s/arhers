@@ -1,20 +1,15 @@
 package sample;
 
-import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
-
-import java.awt.*;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import java.util.Collections;
+import java.util.Random;
+import static sample.Controller.player1;
+import static sample.Controller.player2;
 import static sample.Main.Direction;
 import static sample.Controller.*;
 import static sample.MathTread.matrix;
-
 
 public class Player {
 
@@ -27,29 +22,47 @@ public class Player {
     Color color2;//цвет внуренего круга
     Color color3;//цвет квадрата при выделении
     int y=0;
-    ArrayList<ArcherPoint> PlayerPoint= new ArrayList<>();
+    ArrayList<ArcherPoint> PlayerPoint;
 
-    public Player(int y,Color color,Color color2, Color color3, Boolean NeedSelect,Boolean bot){
-        for(int i=0;i<5;i++){
+    Player(int y, Color color, Color color2, Color color3, Boolean NeedSelect, Boolean bot){
             this.y=y;
             this.color=color;
             this.color2=color2;
             this.color3=color3;
             this.NeedSelect =NeedSelect;
+            this.bot=bot;
+            this.PlayerPoint= new ArrayList<>();
+
+            for(int i=0;i<5;i++){
+                ArcherPoint archerPoint = new ArcherPoint(i,y,color,color2,color3);
+                PlayerPoint.add(archerPoint);
+            }
+    }
+    Player(Player another) {
+        this.bot = another.bot;
+        this.win=another.win;
+        this.CanDeadSelect=another.CanDeadSelect;
+        this.SelectFlag=another.CanDeadSelect;
+        this.NeedSelect=another.NeedSelect;
+        this.color=another.color;
+        this.color2=another.color2;
+        this.color3=another.color3;
+        this.y=another.y;
+        this.PlayerPoint= new ArrayList<>();
+
+        for(int i=0;i<5;i++){
             ArcherPoint archerPoint = new ArcherPoint(i,y,color,color2,color3);
             PlayerPoint.add(archerPoint);
-            this.bot=bot;
         }
     }
-
-    public void paint(Player player1,Player player2){
+    public void paint(){
         for (ArcherPoint point : PlayerPoint){
             if(!point.Killed) {
                 point.paint();
             }
         }
     }
-    public void DeadPaint(Player player1,Player player2){
+    public void DeadPaint(){
         for (ArcherPoint point : PlayerPoint){
             if(point.Killed&&point.Kill>0) {
                 point.paint();
@@ -57,7 +70,7 @@ public class Player {
         }
     }
     //выбираем лучника для перемешения
-    public void select(int x, int y,Player player1,Player player2){
+    public void select(int x, int y){
         //флаг выбора лучника
         SelectFlag=false;
         //проверяем своих лучников
@@ -75,7 +88,7 @@ public class Player {
             Controller.Text.setText("Ничего не выбрано");
         }
     }
-    public void unselect(Player player1,Player player2){
+    public void unselect(){
         for (ArcherPoint point : PlayerPoint){
             if(point.select){
                 point.select=false;
@@ -84,7 +97,8 @@ public class Player {
             }
         }
     }
-    public boolean PointMove(int x,int y,Player player1,Player player2){
+    public boolean PointMove(int x,int y){
+
         int n=0;
         boolean MoveOrNo=false;
         for (ArcherPoint point : PlayerPoint){
@@ -95,7 +109,7 @@ public class Player {
                     if (matrix[point.n][n] == 1 || matrix[n][point.n] == 1) {
 
                         point.setXY(x, y);
-                        HistoryCheck(player1,player2);
+                        HistoryCheck();
 
 
                         MoveOrNo = true;
@@ -184,10 +198,10 @@ public class Player {
                 }
                 //point.setXY(x,y);
         }
-        GameOverCheck(player1,player2);
+        GameOverCheck();
         return MoveOrNo;
     }
-    public boolean FreePlaceCheck(int x,int y,Player player1,Player player2){
+    public boolean FreePlaceCheck(int x,int y){
         //если в выбраной точке уже стоит лучник то false сюда нельхя перемешать
         boolean FreePlace = true;
 
@@ -211,7 +225,7 @@ public class Player {
 
         return FreePlace;
     }
-    public boolean HistoryCheck(Player player1,Player player2){
+    private boolean HistoryCheck(){
         boolean NotEqStep =true;
         for(ArcherPoint point : PlayerPoint){
             int n=point.WayHistory.size();
@@ -231,8 +245,7 @@ public class Player {
         }
         return NotEqStep;
     }
-    //воскрешение мертвеца
-    public void DeadSelect(int x,int y,Player player1,Player player2){
+    public void DeadSelect(int x,int y){
         System.out.println("asdasdsadasd");
         for (ArcherPoint point : PlayerPoint) {
             if (x == point.x && y == point.y && point.Killed) {
@@ -242,7 +255,7 @@ public class Player {
             }
         }
     }
-    public boolean DeadMove(int x,int y,Player player1,Player player2){
+    public boolean DeadMove(int x,int y){
 
         int n=0;
         boolean MoveOrNo=false;
@@ -262,7 +275,7 @@ public class Player {
         return MoveOrNo;
 
     }
-    public void GameOverCheck(Player player1,Player player2){
+    private void GameOverCheck(){
 
 
         int g1=0;
@@ -297,14 +310,12 @@ public class Player {
         }
         if(g2==n2){
             player2.win=true;
-            Controller.Text.setText("Игрок 2 победил");
+            Controller.Text.setText("Бот победил");
             moveSelect.GameOver=true;
         }
 
     }
-
-    //бот который не даст никому победить
-    public void minimax(Player player1temp,Player player2temp){
+    public void think(){
         System.out.println("Время бота думать");
         System.out.println("Возможные ходы бота");
 
@@ -312,25 +323,20 @@ public class Player {
         ArrayList<Integer> vozmXodKuda = new ArrayList<>();
         ArrayList<Integer> OcenkaXoda = new ArrayList<>();
 
-
-        for(ArcherPoint point:player2temp.PlayerPoint){
+        for(ArcherPoint point:player2.PlayerPoint){
 
             for(int j=0;j<25;j++){
                 boolean bad=false;
                 if((matrix[point.n][j]==1||matrix[j][point.n]==1)&&!point.Killed) {
+
                     //System.out.println("Бот может сходить из " + point.n + " v " + j);
-
-
-
-
-
-
                     //System.out.println("Бот должен проверить хороший это ход или плохой");
 
+                    for(ArcherPoint point2:player1.PlayerPoint){
 
-                    for(ArcherPoint point2:player1temp.PlayerPoint){
                         for(int i=0;i<25;i++){
-                            if(matrix[point2.n][i]==1||matrix[i][point2.n]==1) {
+                            if((matrix[point2.n][i]==1||matrix[i][point2.n]==1)&&!point2.Killed) {
+                                //System.out.println(">"+point2.n);
                                 if(j==i){
                                     //System.out.println("Плохой ход");
                                     bad=true;
@@ -340,37 +346,41 @@ public class Player {
                         }
                     }
 
-
                     if(!point.Zapret){
                         if(point.n!=point.zaprenN) {
-                            vozmXodOt.add(point.n);
-                            vozmXodKuda.add(j);
+                            if(point.n>4) {
+                                vozmXodOt.add(point.n);
+                                vozmXodKuda.add(j);
+                            }
                             if(bad){
-                                OcenkaXoda.add(-10);
+                                OcenkaXoda.add(-20);
                             }else{
-                                OcenkaXoda.add(10);
+                                OcenkaXoda.add(20);
                             }
                         }
                     }
-
-
-
-
-
                 }
-
-
             }
-
         }
 
-
-
-
+        //удаляем одинаковых
+        for(int i=0;i<vozmXodOt.size();i++){
+            for(int j=0;j<vozmXodOt.size();j++) {
+                if (vozmXodOt.get(i).equals(vozmXodKuda.get(i))) {
+                    vozmXodOt.set(i,99);
+                    vozmXodKuda.set(i,99);
+                    OcenkaXoda.set(i,99);
+                }
+            }
+        }
+        //проверить можно ли из возможных ходов перейти на стартовую линию врага
         for (int i=0;i<vozmXodKuda.size();i++){
-            System.out.println(i);
-            System.out.println(vozmXodOt.get(i)+" v "+vozmXodKuda.get(i)+" "+OcenkaXoda.get(i));
-
+            if(vozmXodKuda.get(i)<5){
+                //System.out.println(">"+vozmXodOt.get(i)+" v "+vozmXodKuda.get(i)+" "+OcenkaXoda.get(i));
+                int z=OcenkaXoda.get(i)+10;
+                OcenkaXoda.set(i,z);
+                //System.out.println(">"+vozmXodOt.get(i)+" v "+vozmXodKuda.get(i)+" "+OcenkaXoda.get(i));
+            }
         }
 
         //выбираем сомое большое число
@@ -380,10 +390,37 @@ public class Player {
         for (int i=0;i<vozmXodKuda.size();i++){
             if(OcenkaXoda.get(i)>N)
                 N=OcenkaXoda.get(i);
-                iz=vozmXodOt.get(i);
-                kuda=vozmXodKuda.get(i);
-
         }
+
+        for (int i=0;i<vozmXodKuda.size();i++){
+            if(OcenkaXoda.get(i)<N){
+                vozmXodOt.set(i,99);
+                vozmXodKuda.set(i,99);
+                OcenkaXoda.set(i,99);
+            }
+        }
+
+        //удалёям нулевые
+        vozmXodOt.removeAll(Collections.singleton(99));
+        vozmXodKuda.removeAll(Collections.singleton(99));
+        OcenkaXoda.removeAll(Collections.singleton(99));
+
+        for(int i=0;i<vozmXodKuda.size();i++){
+            System.out.println(vozmXodOt.get(i)+" v "+vozmXodKuda.get(i)+" "+OcenkaXoda.get(i));
+        }
+
+        System.out.println(">"+OcenkaXoda.size());
+        int V=0;
+        Random random = new Random();
+
+        System.out.println(OcenkaXoda.size());
+        System.out.println(vozmXodOt.size());
+        System.out.println(vozmXodKuda.size());
+
+        V= random.nextInt(vozmXodOt.size());
+        System.out.println(">" + V);
+        iz = vozmXodOt.get(V);
+        kuda=vozmXodKuda.get(V);
 
         System.out.println("бот решил ходить из "+iz+" v "+kuda);
 
@@ -395,123 +432,20 @@ public class Player {
         int y2=0;
         int x2=0;
 
-
-
         y1=iz/5;
         x1=iz-5*y1;
 
         y2=kuda/5;
         x2=kuda-5*y2;
 
-        for(ArcherPoint point:player2temp.PlayerPoint){
-            System.out.println(point.Zapret);
-        }
-
-
-
-        player2.select(x1,y1,player1,player2);
-        if (player1.FreePlaceCheck(x2, y2,player1,player2)) {
-            player2.PointMove(x2, y2,player1,player2);
+        player2.select(x1,y1);
+        if (player1.FreePlaceCheck(x2, y2)&&player2.FreePlaceCheck(x2,y2)) {
+            player2.PointMove(x2, y2);
         }
 
         player1.NeedSelect = true;
         player2.NeedSelect = false;
         moveSelect.color = player1.color3;
         System.out.println();
-
-
-
-
     }
-
-    public void minimax2(Player player1temp,Player player2temp) {
-        System.out.println("Время бота думать");
-        System.out.println("Возможные ходы бота");
-
-        ArrayList<Integer> vozmXodOt = new ArrayList<>();
-        ArrayList<Integer> vozmXodKuda = new ArrayList<>();
-        ArrayList<Integer> OcenkaXoda = new ArrayList<>();
-
-        //ходим
-        //декодируем n в x и y
-        int y1 = 0;
-        int x1 = 0;
-        //куда
-        int y2 = 0;
-        int x2 = 0;
-
-        for (ArcherPoint point : player2temp.PlayerPoint) {
-
-            for (int j = 0; j < 25; j++) {
-                boolean bad = false;
-                if ((matrix[point.n][j] == 1 || matrix[j][point.n] == 1) && !point.Killed) {
-                    //System.out.println("Бот может сходить из " + point.n + " v " + j);
-
-
-                    if (!point.Zapret) {
-                        if (point.n != point.zaprenN) {
-
-                            System.out.println("бот решил ходить из " + point.n + " v " + j);
-                            y1 = point.n / 5;
-                            x1 = point.n - 5 * y1;
-
-                            y2 = j / 5;
-                            x2 = j - 5 * y2;
-
-                            player2temp.select(x1, y1,player1,player2);
-                            if (player1temp.FreePlaceCheck(x2, y2, player1temp, player2temp)) {
-                                player2temp.PointMove(x2, y2,player1,player2);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-
-
-        player1temp.NeedSelect = true;
-        player2temp.NeedSelect = false;
-        moveSelect.color = player1.color3;
-
-       /* GameOverCheck();
-
-        if (!moveSelect.GameOver) {
-            System.out.println("Теперь время просчитывать ходы игрока");
-            for (ArcherPoint point : player1temp.PlayerPoint) {
-                for (int j = 0; j < 25; j++) {
-                    boolean bad = false;
-                    if ((matrix[point.n][j] == 1 || matrix[j][point.n] == 1) && !point.Killed) {
-                        System.out.println("Игрок может может сходить из " + point.n + " v " + j);
-
-
-                        y1 = point.n / 5;
-                        x1 = point.n - 5 * y1;
-
-                        y2 = j / 5;
-                        x2 = j - 5 * y2;
-
-                        player1temp.select(x1, y1);
-                        if (player1temp.FreePlaceCheck(x2, y2, player1temp, player2temp)) {
-                            System.out.println("Рекурсия");
-                            player2temp.PointMove(x2, y2);
-                            player2temp.NeedSelect = true;
-                            player1temp.NeedSelect = false;
-                            moveSelect.color = player1.color3;
-                            minimax2(player1temp, player2temp);
-                        }
-
-                    }
-                }
-            }
-
-        }*/
-    }
-
-
-
-
-
-
-
 }

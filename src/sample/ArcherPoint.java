@@ -1,10 +1,7 @@
 package sample;
 
 import javafx.scene.paint.Color;
-
-import java.awt.*;
 import java.util.ArrayList;
-
 import static sample.Controller.*;
 
 public class ArcherPoint {
@@ -29,12 +26,9 @@ public class ArcherPoint {
         this.color2=color2;
         this.color3=color3;
         this.TempColor=color2;
-
         n=5*y+x;
-
         WayHistory.add(n);
     }
-
 
     public void paint(){
             //100px ячейка
@@ -70,9 +64,7 @@ public class ArcherPoint {
             gc.setFill(color2);
             gc.fillOval(40+(x*100),40+(y*100),ArchSize/2,ArchSize/2);
             gc.setFill(color2);
-
     }
-
     public void setXY(int x,int y){
         this.x=x;
         this.y=y;
@@ -81,9 +73,4 @@ public class ArcherPoint {
         zaprenN=0;
         Zapret=false;
     }
-
-
-
-
-
 }

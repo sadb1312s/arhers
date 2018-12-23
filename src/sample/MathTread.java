@@ -1,18 +1,12 @@
 package sample;
 
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import static sample.Controller.*;
-import static sample.Main.Direction;
-
 
 public class MathTread extends Thread{
     static boolean NeedDeadPrint=false;
     static int[][] matrix= new int[25][25];
     boolean gameover=false;
-    int x=0;
-
 
     @Override
     public void run() {
@@ -68,34 +62,21 @@ public class MathTread extends Thread{
             WayRender();
             gameFieldPaint();
 
-
-            player1.paint(player1,player2);
-            player2.paint(player1,player2);
-
-
+            player1.paint();
+            player2.paint();
 
             if(NeedDeadPrint){
                 if(player1.CanDeadSelect) {
-                    player1.DeadPaint(player1,player2);
+                    player1.DeadPaint();
                 }
                 if(player2.CanDeadSelect) {
-                    player2.DeadPaint(player1,player2);
+                    player2.DeadPaint();
                 }
             }
-
-
-
-
         }
-
-
     }
 
     private void WayRender(){
-
-        //заполнение матрицы смежности
-        //gc.strokeLine(50+x1*100, 50+y1*100, 50+(x2-1)*100, 50+(y2-1)*100);
-
         //откуда
         int y1=0;
         int x1=0;
@@ -128,12 +109,8 @@ public class MathTread extends Thread{
             }
             x2=0;
             y2=0;
-
-
-
         }
     }
-
     private void gameFieldPaint(){
         for(int i=0;i<5;i++){
             for(int j=0;j<5;j++){
@@ -146,46 +123,7 @@ public class MathTread extends Thread{
                 gc.setFill(Color.WHITE);
                 gc.fillOval(31+(j*100),31+(i*100),38,38);
                 gc.setFill(Color.WHITE);
-
             }
-
-        }
-    }
-
-    private void DelKillArch(){
-        //удалём убитых
-        int del=0;
-        int i=0;
-        boolean delete=false;
-
-        for(ArcherPoint point: player1.PlayerPoint){
-
-            if(point.Killed){
-                delete=true;
-                del=i;
-            }
-            i++;
-
-        }
-        if(delete){
-            player1.PlayerPoint.remove(del);
-        }
-        //удалём убитых
-        del=0;
-        i=0;
-        delete=false;
-
-        for(ArcherPoint point: player2.PlayerPoint){
-
-            if(point.Killed){
-                delete=true;
-                del=i;
-            }
-            i++;
-
-        }
-        if(delete){
-            player2.PlayerPoint.remove(del);
         }
     }
 }
